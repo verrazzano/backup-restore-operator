@@ -1,29 +1,35 @@
-FROM registry.suse.com/bci/golang:1.17
-# Add buildx plugin
-COPY --from=docker.io/docker/buildx-bin:0.8.2 /buildx /usr/libexec/docker/cli-plugins/docker-buildx
+FROM ghcr.io/oracle/oraclelinux:7-slim
 
 ARG DAPPER_HOST_ARCH
 ENV ARCH $DAPPER_HOST_ARCH
 
-RUN zypper -n in git-core curl tar gzip docker wget awk hostname && \
-    zypper -n clean -a && \
-    rm -rf /tmp/* /var/tmp/* /usr/share/doc/packages/*
+ENV GOPATH=/go PATH=/go/bin:/usr/local/go/bin:${PATH} SHELL=/bin/bash
+
+RUN yum-config-manager --enable ol7_optional_latest && \
+    yum-config-manager --enable ol7_addons
+
+RUN yum update -y && \
+    # software collections repo needed for git 2.x on OL7
+    yum-config-manager --add-repo=http://yum.oracle.com/repo/OracleLinux/OL7/SoftwareCollections/x86_64 && \
+    yum install -y bash rh-git227 gcc musl-dev glibc-static docker-cli vim less libffi file curl wget ca-certificates unzip tar && \
+    # Set up needed to ensure git 2.27 from rh-git227 is on the path
+    ln /opt/rh/rh-git227/enable /etc/profile.d/git.sh && \
+    source /etc/profile.d/git.sh && \
+    git version
+
+# Update PATH to make sure git 2.27 is on the path
+ENV PATH="/opt/rh/rh-git227/root/usr/bin:${PATH}"
+
+RUN yum install -y oracle-golang-release-el7 && \
+    yum-config-manager --disable ol7_developer_golang\* && \
+    yum-config-manager --enable ol7_developer_golang117 && \
+    yum install -y golang
+
 
 RUN if [ "${ARCH}" == "amd64" ]; then \
         curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.46.2; \
     fi
 RUN curl -sL https://get.helm.sh/helm-v3.9.0-linux-${ARCH}.tar.gz | tar xvzf - -C /usr/local/bin --strip-components=1
-RUN if [ "${ARCH}" != "s390x" ]; then \
-        helm plugin install https://github.com/quintush/helm-unittest; \
-    fi
-
-#integration tests only support amd64
-RUN if [ "${ARCH}" == "amd64" ]; then \
-        curl -sL https://github.com/rancher/k3s/releases/download/$(curl -Ls -o /dev/null -w %{url_effective} https://update.k3s.io/v1-release/channels/stable | awk -F/ '{ print $NF }')/k3s > /usr/local/bin/k3s \
-        && chmod +x /usr/local/bin/k3s \
-        && curl -sL https://dl.min.io/client/mc/release/linux-amd64/mc > /usr/local/bin/mc \
-        && chmod +x /usr/local/bin/mc; \
-    fi
 
 ENV DAPPER_ENV REPO TAG DRONE_TAG CROSS USE_DOCKER_BUILDX
 ENV DAPPER_SOURCE /go/src/github.com/rancher/backup-restore-operator/
