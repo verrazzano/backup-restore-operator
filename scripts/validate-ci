@@ -3,7 +3,10 @@ set -e
 
 cd $(dirname $0)/..
 
-go generate
+# Disable the call to go generate because this results in a "dirty"
+# repo when the year changes, because there is a trivial change to 
+# the copyright line in all the generated files
+#go generate
 
 source ./scripts/version
 
