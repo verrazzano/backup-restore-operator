@@ -22,7 +22,10 @@ ENV PATH="/opt/rh/rh-git227/root/usr/bin:${PATH}"
 
 RUN yum install -y oracle-golang-release-el7 && \
     yum-config-manager --disable ol7_developer_golang\* && \
+<<<<<<< HEAD
     yum-config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL7/developer_EPEL/x86_64 && \
+=======
+>>>>>>> 7198833... update golang 1.20.12
     yum install golang-1.20.10-3.el7.x86_64 -y
 
 
