@@ -22,8 +22,7 @@ ENV PATH="/opt/rh/rh-git227/root/usr/bin:${PATH}"
 
 RUN yum install -y oracle-golang-release-el7 && \
     yum-config-manager --disable ol7_developer_golang\* && \
-    yum-config-manager --enable ol7_developer_golang119 && \
-    yum install -y golang
+    yum install golang-1.20.10-3.el7.x86_64 -y
 
 
 RUN if [ "${ARCH}" == "amd64" ]; then \
