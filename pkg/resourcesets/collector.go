@@ -524,8 +524,9 @@ func writeToBackup(resource map[string]interface{}, backupPath, filename string,
 	if err != nil {
 		return fmt.Errorf("error converting resource to JSON: %v", err)
 	}
+	var ctx context.Context
 	if transformer != nil {
-		encrypted, err := transformer.TransformToStorage(resourceBytes, value.DefaultContext([]byte(additionalAuthenticatedData)))
+		encrypted, err := transformer.TransformToStorage(ctx, resourceBytes, value.DefaultContext([]byte(additionalAuthenticatedData)))
 		if err != nil {
 			return fmt.Errorf("error converting resource to JSON: %v", err)
 		}
