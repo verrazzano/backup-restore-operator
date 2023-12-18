@@ -20,7 +20,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	golang.org/x/sync v0.1.0
 	k8s.io/api v0.25.15
-	k8s.io/apiextensions-apiserver v0.18.0
+	k8s.io/apiextensions-apiserver v0.25.15
 	k8s.io/apimachinery v0.25.15
 	k8s.io/apiserver v0.25.15
 	k8s.io/client-go v0.25.15
