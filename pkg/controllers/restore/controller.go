@@ -924,7 +924,7 @@ func setValidationOverride(un *unstructured.Unstructured, fieldOverride map[stri
 			continue
 		}
 		finalOverride = append(finalOverride, v)
-	
+
 	}
 
 	// Write back to top object
