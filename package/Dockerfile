@@ -5,7 +5,8 @@ RUN yum update -y \
     && rm -rf /var/cache/yum/*
 
 COPY . /go/src/github.com/backup-restore-operator/
-RUN ./build
+RUN  cd /go/src/github.com/backup-restore-operator/scripts && \
+    ./build
 
 FROM ghcr.io/verrazzano/golang:v1.20.12
 
