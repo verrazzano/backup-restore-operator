@@ -2,7 +2,6 @@ package util
 
 import (
 	"fmt"
-	"os"
 	"reflect"
 
 	v1core "github.com/rancher/wrangler/pkg/generated/controllers/core/v1"
