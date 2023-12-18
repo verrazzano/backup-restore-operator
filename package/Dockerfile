@@ -1,4 +1,4 @@
-FROM ghcr.io/verrazzano/golang:v1.20.12 as build
+FROM ghcr.io/verrazzano/golang:v1.20.12 
 RUN yum update -y \
     && yum clean all \
     && rm -rf /var/cache/yum/*
