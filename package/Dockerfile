@@ -9,9 +9,13 @@ COPY . /go/src/github.com/backup-restore-operator/
 RUN dnf config-manager --enable ol8_appstream && \
     dnf install -y git && \
     cd /go/src/github.com/backup-restore-operator/scripts && \
-    ./build
+    ./build && \ 
+    ./test
 
-FROM ghcr.io/verrazzano/golang:v1.20.12
+FROM ghcr.io/oracle/oraclelinux:8-slim
+
+RUN microdnf -y update && \
+    microdnf -y clean all
 
 COPY --from=build /go/src/github.com/backup-restore-operator/bin/backup-restore-operator /usr/bin/
 
