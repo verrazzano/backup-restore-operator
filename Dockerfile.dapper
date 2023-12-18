@@ -27,7 +27,7 @@ RUN yum install -y oracle-golang-release-el7 && \
 
 
 RUN if [ "${ARCH}" == "amd64" ]; then \
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.50.1; \
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.55.2; \
     fi
 RUN curl -sL https://get.helm.sh/helm-v3.9.0-linux-${ARCH}.tar.gz | tar xvzf - -C /usr/local/bin --strip-components=1
 
