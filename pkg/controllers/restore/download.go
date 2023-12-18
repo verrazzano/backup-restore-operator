@@ -19,7 +19,7 @@ import (
 )
 
 func (h *handler) downloadFromS3(restore *v1.Restore, objStore *v1.S3ObjectStore) (string, error) {
-	s3Client, err := objectstore.GetS3Client(objStore, h.dynamicClient)
+	s3Client, err := objectstore.GetS3Client(h.ctx, objStore, h.dynamicClient)
 	if err != nil {
 		return "", err
 	}
@@ -111,7 +111,7 @@ func (h *handler) loadDataFromFile(tarContent *tar.Header, readData []byte,
 			logrus.Errorf("Error unmarshaling encrypted data for resource [%v]: %v", gvr.GroupResource(), err)
 			return fmt.Errorf("error unmarshaling encrypted data for resource [%v]: %v", gvr.GroupResource(), err)
 		}
-		decrypted, _, err := decryptionTransformer.TransformFromStorage(h.ctx, encryptedBytes, value.DefaultContext(additionalAuthenticatedData))
+		decrypted, _, err := decryptionTransformer.TransformFromStorage(encryptedBytes, value.DefaultContext(additionalAuthenticatedData))
 		if err != nil {
 			logrus.Errorf("Error decrypting encrypted resource [%v]: %v, provide same encryption config as used for backup", gvr.GroupResource(), err)
 			return fmt.Errorf("error decrypting encrypted resource [%v]: %v, provide same encryption config as used for backup", gvr.GroupResource(), err)
