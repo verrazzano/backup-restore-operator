@@ -1,8 +1,8 @@
 package util
 
 import (
-	"bytes"
 	"fmt"
+	"os"
 	"reflect"
 
 	v1core "github.com/rancher/wrangler/pkg/generated/controllers/core/v1"
@@ -35,7 +35,7 @@ func GetEncryptionTransformers(encryptionConfigSecretName string, secrets v1core
 	if !ok {
 		return transformerMap, fmt.Errorf("no encryptionConfig provided")
 	}
-	err = ioutil.WriteFile(encryptionProviderConfigKey, encryptionConfigBytes, os.ModePerm)
+	err = os.WriteFile(encryptionProviderConfigKey, encryptionConfigBytes, os.ModePerm)
 	defer os.Remove(encryptionProviderConfigKey)
 	if err != nil {
 		return transformerMap, err
