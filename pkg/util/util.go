@@ -35,16 +35,7 @@ func GetEncryptionTransformers(encryptionConfigSecretName string, secrets v1core
 	if !ok {
 		return transformerMap, fmt.Errorf("no encryptionConfig provided")
 	}
-	err = os.WriteFile(encryptionProviderConfigKey, encryptionConfigBytes, os.ModePerm)
-	defer os.Remove(encryptionProviderConfigKey)
-	if err != nil {
-		return transformerMap, err
-	}
-	transformerOverrides, err := encryptionconfig.GetTransformerOverrides(encryptionProviderConfigKey)
-	if err != nil {
-		return transformerMap, err
-	}
-	return transformerOverrides, nil
+	return encryptionconfig.ParseEncryptionConfiguration(bytes.NewReader(encryptionConfigBytes))
 }
 
 func GetObjectQueue(l interface{}, capacity int) chan interface{} {
