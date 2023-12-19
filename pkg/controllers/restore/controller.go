@@ -922,9 +922,9 @@ func setValidationOverride(un *unstructured.Unstructured, fieldOverride map[stri
 		if !ok {
 			logrus.Errorf("%s not found for kind %s", schemaPath, crdKind(un))
 			continue
-		} else {
-			finalOverride = append(finalOverride, v)
 		}
+		finalOverride = append(finalOverride, v)
+
 	}
 
 	// Write back to top object
